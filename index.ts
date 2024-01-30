@@ -4,10 +4,13 @@ import https from "https";
 import http from "http";
 import fs from "fs";
 import indexRoute from "./routes/index.route";
+import publicKeyRoute from './routes/publicKey.route';
+import listingsRoute from './routes/listings.route';
 import { corsURLS, httpPort, httpsPort } from "./configs/server.config";
 import errorMiddleware from './middleware/error.middleware';
 import notfoundMiddleware from './middleware/notfound.middleware';
 import { createTable as createSellersTable } from './services/sellers.db.service';
+import { createTable as createListingsTable } from './services/listings.db.service';
 const app = express();
 
 // Setting up for JSON Data
@@ -30,6 +33,8 @@ app.use(cors({
 // Express Routes Start Here
 
 app.use('/', indexRoute);
+app.use('/publicKey', publicKeyRoute);
+app.use('/listings', listingsRoute);
 
 // Express Routes End Here
 
@@ -41,6 +46,7 @@ app.use(errorMiddleware);
 
 (async () => {
     await createSellersTable();
+    await createListingsTable();
 
     http.createServer(app).listen(httpPort, () => {
         console.log(`Http Server is running on port ${httpPort}`);

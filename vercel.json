@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "backend-skeleton",
+    "name": "decentral-goods-backend",
     "builds": [
       { "src": "index.ts", "use": "@vercel/node" }
     ],
