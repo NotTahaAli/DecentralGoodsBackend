@@ -67,5 +67,5 @@ export async function createTable() {
         "imageUrl" text NOT NULL,
         "sellerAddress" char(42) NOT NULL
       );`);
-    await databasePool.query(`ALTER TABLE "Listings" ADD CONSTRAINT "sellerAddress" FOREIGN KEY ("sellerAddress") REFERENCES "Sellers" ("Address") ON DELETE CASCADE;`);
+    await databasePool.query(`ALTER TABLE "Listings" ADD FOREIGN KEY ("sellerAddress") REFERENCES "Sellers" ("Address") ON DELETE CASCADE;`);
 }

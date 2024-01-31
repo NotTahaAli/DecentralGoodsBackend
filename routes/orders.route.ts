@@ -71,11 +71,15 @@ ordersRoute.post("/:orderId", async (req, res) => {
         sendResponse(res, 400, "Invalid Body");
         return;
     }
+    if (!/^[0-9a-fA-F]+$/.test(buyerInfo)) {
+        sendResponse(res, 400, "Invalid Buyer Info");
+        return;
+    }
     if (!isValidAddress(address)) {
         sendResponse(res, 400, "Invalid Address");
         return;
     }
-    const isValidOrError: true | string = verifySignedData(address, JSON.stringify({ buyerInfo, orderId }, ["orderId", "buyerInfo"]), timestamp, signature);
+    const isValidOrError: true | string = verifySignedData(address, JSON.stringify({ buyerInfo: buyerInfo.toLowerCase(), orderId }, ["orderId", "buyerInfo"]), timestamp, signature);
     if (isValidOrError !== true) {
         sendResponse(res, 400, isValidOrError);
         return;
@@ -102,7 +106,7 @@ ordersRoute.post("/:orderId", async (req, res) => {
         sendResponse(res, 500, "Blockchain Error");
         return;
     }
-    let success = await setOrderDetails(BigInt(orderId), BigInt(ListingId), address.toLowerCase(), buyerInfo);
+    let success = await setOrderDetails(BigInt(orderId), BigInt(ListingId), address.toLowerCase(), buyerInfo.toLowerCase());
     if (success) {
         sendResponse(res, 200);
     } else {

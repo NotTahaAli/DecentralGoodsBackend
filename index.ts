@@ -1,11 +1,12 @@
 import cors from 'cors';
-import express, { Request, Response } from "express";
+import express from "express";
 import https from "https";
 import http from "http";
 import fs from "fs";
 import indexRoute from "./routes/index.route";
 import publicKeyRoute from './routes/publicKey.route';
 import listingsRoute from './routes/listings.route';
+import ordersRoute from './routes/orders.route';
 import { corsURLS, httpPort, httpsPort } from "./configs/server.config";
 import errorMiddleware from './middleware/error.middleware';
 import notfoundMiddleware from './middleware/notfound.middleware';
@@ -36,6 +37,7 @@ app.use(cors({
 app.use('/', indexRoute);
 app.use('/publicKey', publicKeyRoute);
 app.use('/listings', listingsRoute);
+app.use('/orders', ordersRoute);
 
 // Express Routes End Here
 
