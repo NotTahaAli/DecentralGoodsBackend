@@ -11,6 +11,7 @@ import errorMiddleware from './middleware/error.middleware';
 import notfoundMiddleware from './middleware/notfound.middleware';
 import { createTable as createSellersTable } from './services/sellers.db.service';
 import { createTable as createListingsTable } from './services/listings.db.service';
+import { createTable as createOrdersTable } from './services/orders.db.service';
 const app = express();
 
 // Setting up for JSON Data
@@ -47,6 +48,7 @@ app.use(errorMiddleware);
 (async () => {
     await createSellersTable();
     await createListingsTable();
+    await createOrdersTable();
 
     http.createServer(app).listen(httpPort, () => {
         console.log(`Http Server is running on port ${httpPort}`);

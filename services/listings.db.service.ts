@@ -1,21 +1,43 @@
+import { QueryResult } from "pg";
+import isValidAddress from "../utils/isValidAddress.util";
 import databasePool from "./db.service";
-type Listing = {
+
+export type Listing = {
     ListingId: string,
     title: string,
     description: string,
-    imageUrl: string
+    imageUrl: string,
+    sellerAddress: string
+}
+
+export async function getAllListings(limit = 100, endingPoint: string | undefined = undefined): Promise<Listing[]> {
+    let resp : QueryResult<Listing>;
+    console.log(limit);
+    if (endingPoint == undefined) {
+        resp = await databasePool.query<Listing>(`SELECT * FROM "Listings" WHERE "ListingId" < $2 ORDER BY "ListingId" DESC LIMIT $1`, [limit, endingPoint]);
+    } else {
+        resp = await databasePool.query<Listing>(`SELECT * FROM "Listings" WHERE "ListingId" < $2 ORDER BY "ListingId" DESC LIMIT $1`, [limit, endingPoint]);
+    }
+    return resp.rows;
+}
+
+export async function getListingsFromSellerAddress(sellerAddress: string): Promise<Listing[]> {
+    if (!isValidAddress(sellerAddress)) return [];
+    let resp = await databasePool.query<Listing>(`SELECT * FROM "Listings" WHERE "sellerAddress" = $1`, [sellerAddress]);
+    return resp.rows;
 }
 
 export async function getListingDetailsFromId(ListingId: bigint): Promise<false | Listing> {
     if (ListingId <= 0) return false;
-    let resp = await databasePool.query(`SELECT * FROM "Listings" WHERE "ListingId" = $1`, [ListingId]);
+    let resp = await databasePool.query<Listing>(`SELECT * FROM "Listings" WHERE "ListingId" = $1`, [ListingId]);
     if (resp.rowCount == 0) return false;
     return resp.rows[0];
 }
 
-export async function setListingDetails(ListingId: bigint, title: string, description: string, imageUrl: string) : Promise<boolean> {
+export async function setListingDetails(ListingId: bigint, title: string, description: string, imageUrl: string, sellerAddress: string) : Promise<boolean> {
     if (ListingId <= 0) return false;
-    await databasePool.query(`INSERT INTO "Listings"("ListingId", "title", "description", "imageUrl") VALUES($1, $2, $3, $4) ON CONFLICT("ListingId") DO UPDATE SET "title" = $2, "description" = $3, "imageUrl" = $4;`, [ListingId, title, description, imageUrl]);
+    if (!isValidAddress(sellerAddress)) return false;
+    await databasePool.query(`INSERT INTO "Listings"("ListingId", "title", "description", "imageUrl", "sellerAddress") VALUES($1, $2, $3, $4, $5) ON CONFLICT("ListingId") DO UPDATE SET "title" = $2, "description" = $3, "imageUrl" = $4;`, [ListingId, title, description, imageUrl, sellerAddress]);
     return true;
 }
 
@@ -42,6 +64,8 @@ export async function createTable() {
         "ListingId" numeric PRIMARY KEY,
         "title" text NOT NULL,
         "description" text NOT NULL,
-        "imageUrl" text NOT NULL
+        "imageUrl" text NOT NULL,
+        "sellerAddress" char(42) NOT NULL
       );`);
+    await databasePool.query(`ALTER TABLE "Listings" ADD CONSTRAINT "sellerAddress" FOREIGN KEY ("sellerAddress") REFERENCES "Sellers" ("Address") ON DELETE CASCADE;`);
 }
