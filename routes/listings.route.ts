@@ -26,7 +26,7 @@ listingsRoute.get("/", async (_req, res) => {
 });
 
 listingsRoute.get("/seller/:sellerAddress", async (req, res) => {
-    let sellerAddress = req.params.sellerAddress;
+    let sellerAddress = req.params.sellerAddress.toLowerCase();
     if (typeof (sellerAddress) != "string" || !isValidAddress(sellerAddress)) {
         sendResponse(res, 400, "Invalid Seller Address");
         return;

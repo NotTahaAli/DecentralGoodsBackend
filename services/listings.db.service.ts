@@ -14,7 +14,7 @@ export async function getAllListings(limit = 100, endingPoint: string | undefine
     let resp : QueryResult<Listing>;
     console.log(limit);
     if (endingPoint == undefined) {
-        resp = await databasePool.query<Listing>(`SELECT * FROM "Listings" WHERE "ListingId" < $2 ORDER BY "ListingId" DESC LIMIT $1`, [limit, endingPoint]);
+        resp = await databasePool.query<Listing>(`SELECT * FROM "Listings" ORDER BY "ListingId" DESC LIMIT $1`, [limit]);
     } else {
         resp = await databasePool.query<Listing>(`SELECT * FROM "Listings" WHERE "ListingId" < $2 ORDER BY "ListingId" DESC LIMIT $1`, [limit, endingPoint]);
     }
