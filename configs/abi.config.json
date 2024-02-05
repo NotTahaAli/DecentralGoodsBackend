@@ -70,7 +70,13 @@
 			}
 		],
 		"name": "buyItem",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "orderId",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "payable",
 		"type": "function"
 	},
@@ -231,7 +237,13 @@
 			}
 		],
 		"name": "listItem",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "listingId",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
