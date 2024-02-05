@@ -12,7 +12,7 @@ export type Order = {
 export async function getAllOrders(limit = 100, endingPoint: string | undefined = undefined): Promise<Order[]> {
     let resp : QueryResult<Order>;
     if (endingPoint == undefined) {
-        resp = await databasePool.query<Order>(`SELECT *, encode("buyerInfo", 'hex') as "buyerInfo" FROM "Orders" WHERE "orderId" < $2 ORDER BY "orderId" DESC LIMIT $1`, [limit, endingPoint]);
+        resp = await databasePool.query<Order>(`SELECT *, encode("buyerInfo", 'hex') as "buyerInfo" FROM "Orders" ORDER BY "orderId" DESC LIMIT $1`, [limit]);
     } else {
         resp = await databasePool.query<Order>(`SELECT *, encode("buyerInfo", 'hex') as "buyerInfo" FROM "Orders" WHERE "orderId" < $2 ORDER BY "orderId" DESC LIMIT $1`, [limit, endingPoint]);
     }

@@ -31,7 +31,7 @@ ordersRoute.get("/seller/:sellerAddress", async (req, res) => {
         sendResponse(res, 400, "Invalid Seller Address");
         return;
     }
-    let listings = await getOrdersFromSellerAddress(sellerAddress);
+    let listings = await getOrdersFromSellerAddress(sellerAddress.toLowerCase());
     sendResponse(res, 200, listings);
 });
 
@@ -41,7 +41,7 @@ ordersRoute.get("/buyer/:buyerAddress", async (req, res) => {
         sendResponse(res, 400, "Invalid Buyer Address");
         return;
     }
-    let listings = await getOrdersFromBuyerAddress(buyerAddress);
+    let listings = await getOrdersFromBuyerAddress(buyerAddress.toLowerCase());
     sendResponse(res, 200, listings);
 });
 
