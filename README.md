@@ -10,4 +10,4 @@ Decentral Goods is an online marketplace with decentralization at its core for s
 
 # [Live Demo](https://decentral-goods-backend.vercel.app/)
 # [Smart Contract](https://sepolia.etherscan.io/address/0x30a06dd243ea356c95585b4c87f783d7bf5ed2ef)
-# [Backend Repo](https://github.com/m-tahaali/DecentralGoodsFrontend)
+# [Frontend Repo](https://github.com/m-tahaali/DecentralGoodsFrontend)
