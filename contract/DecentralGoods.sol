@@ -45,14 +45,14 @@ contract DecentralGoods {
 
     function changeStock(uint _listingId, uint _quantity) public {
         require(_listingId <= lastListing, "Listing does not exist.");
-        require(msg.sender != listings[_listingId]._seller, "You do not own this listing.");
+        require(msg.sender == listings[_listingId]._seller, "You do not own this listing.");
         listings[_listingId]._quantity = _quantity;
     }
 
     function changePrice(uint _listingId, uint _price) public {
         require(_price > 0, "Listing price can not be 0");
         require(_listingId <= lastListing, "Listing does not exist.");
-        require(msg.sender != listings[_listingId]._seller, "You do not own this listing.");
+        require(msg.sender == listings[_listingId]._seller, "You do not own this listing.");
         listings[_listingId]._price = _price;
     }
 
